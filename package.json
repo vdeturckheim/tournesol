@@ -1,31 +1,28 @@
 {
-  "name": "frankenstein",
+  "name": "tournesol",
   "version": "0.0.0",
-  "description": "A Hapi-Glue-Lab-Code tool that could only be created by a mad scientist.",
+  "description": "A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vdeturckheim/frankenstein.git"
+    "url": "git+https://github.com/vdeturckheim/tournesol.git"
   },
   "keywords": [
     "hapi",
-    "lab",
     "glue",
+    "lab",
     "code",
-    "test",
-    "json",
     "crazy",
-    "mad",
     "kiss",
     "kics"
   ],
   "author": "Vladimir de Turckheim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vdeturckheim/frankenstein/issues"
+    "url": "https://github.com/vdeturckheim/tournesol/issues"
   },
-  "homepage": "https://github.com/vdeturckheim/frankenstein#readme"
+  "homepage": "https://github.com/vdeturckheim/tournesol#readme"
 }
