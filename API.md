@@ -7,7 +7,7 @@ Creates requests ready to be used in a [Hapi server](https://github.com/hapijs/h
 ### Init
 
 ```javascript
-const Lcrud = require( '../index' ).Lcrud;
+const Lcrud = require( 'tournesol' ).Lcrud;
 
 var request = new Lcrud(baseURL, getPayload, getHeaders);
 ```
