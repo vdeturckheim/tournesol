@@ -1,4 +1,5 @@
 # Tournesol
+[![Build Status](https://travis-ci.org/vdeturckheim/tournesol.svg?branch=master)](https://travis-ci.org/vdeturckheim/tournesol)
 
 A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist.
 
