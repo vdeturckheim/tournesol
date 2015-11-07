@@ -6,6 +6,7 @@ const lab = exports.lab = Lab.script();
 
 // Import of what to test
 const prepare = require( '../lib/preparation' ).prepareOneTest;
+const prepareAllTests = require( '../lib/preparation' ).prepareAllTests;
 
 lab.experiment( 'Build of a test definition', () => {
 
@@ -166,4 +167,70 @@ lab.experiment( 'Build of a test definition', () => {
     } );
 } );
 
+lab.experiment( 'Build of a set of tests', () => {
 
+    lab.test( 'Two input sets', ( done ) => {
+
+        const definition = {
+            title: 'Title of the test with {pre.item1} and {input.user}',
+            pre: [
+                {
+                    assign: 'item1',
+                    name: 'item1Name',
+                    method: function ( reply ) {
+
+                        // no err
+                        reply( null, 10 );
+                    }
+                }
+            ],
+            paramSets: [
+                {
+                    input: {
+                        user: 'u1'
+                    },
+                    output: {
+                        statusCode: 200,
+                        payload: function ( code, payload ) {
+
+                            code.expect( payload ).to.be.an.array();
+                            code.expect( payload.length ).to.equal( 1 );
+                        }
+                    }
+                },
+                {
+                    input: {
+                        user: 'u3'
+                    },
+                    output: {
+                        statusCode: 403
+                    }
+                }
+            ]
+        };
+
+        prepareAllTests( definition, ( tests ) => {
+
+            Code.expect( tests ).to.be.an.array();
+            Code.expect( tests ).to.have.length( 2 );
+
+            Code.expect( tests[0].test ).to.deep.equal( {
+                title: 'Title of the test with item1Name and u1',
+                input: {
+                    user: 'u1'
+                },
+                pre: {
+                    item1: 10
+                }
+            } );
+
+            Code.expect( tests[0].errList ).to.be.an.array();
+            Code.expect( tests[0].errList ).to.have.length( 0 );
+
+            Code.expect( tests[0].output.statusCode ).to.equal( 200 );
+
+            done();
+        } );
+    } );
+
+} );
