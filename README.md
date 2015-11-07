@@ -2,6 +2,10 @@
 
 A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist.
 
+# Purpose
+
+This package aims at making api tests using Hapi, Lab and Code easier. The idea is to focus on what the tests mean rather than how to perform them.
+
 # About the name
 
 Tournesol is the french name of the crazy professor in [The Adventures of Tintin](https://en.wikipedia.org/wiki/The_Adventures_of_Tintin).

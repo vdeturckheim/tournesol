@@ -4,7 +4,7 @@
   "description": "A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node node_modules/lab/bin/lab -c -L -v"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/vdeturckheim/tournesol/issues"
   },
-  "homepage": "https://github.com/vdeturckheim/tournesol#readme"
+  "homepage": "https://github.com/vdeturckheim/tournesol#readme",
+  "dependencies": {
+    "code": "^2.0.1",
+    "hoek": "^3.0.1"
+  },
+  "devDependencies": {
+    "lab": "^7.2.0"
+  }
 }
