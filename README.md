@@ -3,6 +3,16 @@
 
 A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist.
 
+```shell
+$ npm install tournesol
+```
+
+```javascript
+const Lcrud = require( 'tournesol' ).Lcrud;
+
+var request = new Lcrud(baseURL, getPayload, getHeaders);
+```
+
 # Purpose
 
 This package aims at making api tests using Hapi, Lab and Code easier. The idea is to focus on what the tests mean rather than how to perform them.
