@@ -22,8 +22,8 @@ lab.experiment('Test the example server using the main function', ( ) => {
         ],
         paramSets: [
             {
+                titleComplement: 'hello mommy',
                 input: {
-                    titleComplement: 'hello mommy',
                     itemId: 5
                 },
                 output: {
