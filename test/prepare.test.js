@@ -5,359 +5,126 @@ const Lab = require( 'lab' );
 const lab = exports.lab = Lab.script();
 
 // Import of what to test
-const prepare = require( '../lib/preparation' ).prepareOneTest;
-const prepareAllTests = require( '../lib/preparation' ).prepareAllTests;
+const prepareOneTest = require( '../lib/preparation' ).prepareOneTest;
 const runOneTest = require( '../lib/preparation' ).runOneTest;
 
 // Resources
 const Server = require( '../resources/server' );
 const Lcrud = require( '../index' ).Lcrud;
 
-lab.experiment( 'Build of a test definition', () => {
+lab.experiment( 'prepareOneTest', () => {
 
-    lab.test( 'Build of a test definition without error in pre', ( done ) => {
+    lab.test( 'test building', ( done ) => {
 
-        const title = 'Title of the test with {pre.item1} and {input.str} when {input.bool}';
-        const input = {
-            str: 'value',
-            nb: 10,
-            bool: true,
-            arr: ['a']
-        };
-        const pre = [
+        const title = 'Title: {pre.item1} {input.item}';
+        const pres = [
             {
                 assign: 'item1',
-                name: 'item1Name',
+                name: 'item name',
                 method: function ( reply ) {
-
-                    // no err
+                    //no err
                     reply( null, 10 );
                 }
-            },
-            {
-                assign: 'item2',
-                name: 'item2Name',
-                method: function ( reply ) {
-
-                    // no err
-                    reply( null, 20 );
-                }
             }
         ];
+        const paramSet = {
+            titleComplement: 'complement',
+            input: {
+                item: 'Pony'
+            },
+            output: {
+                statusCode: 200
+            }
+        };
 
-        prepare( title, input, pre, ( errList, test ) => {
+        const preparedTest = prepareOneTest( title, paramSet, pres );
 
-            Code.expect( errList ).to.be.an.array();
-            Code.expect( errList ).to.be.empty();
-
-            Code.expect( test ).to.be.an.object();
-
-            Code.expect( test.title ).to.equal( 'Title of the test with item1Name and value when true' );
-
-            Code.expect( test.input ).to.deep.equal( input );
-
-            Code.expect( test.pre ).to.deep.equal( {
-                item1: 10,
-                item2: 20
-            } );
-
-            done();
+        Code.expect( preparedTest ).to.be.an.object();
+        Code.expect( preparedTest.title ).to.equal( 'Title: item name Pony | complement' );
+        Code.expect( preparedTest.input ).to.deep.equal( {
+            item: 'Pony'
         } );
+        Code.expect( preparedTest.output ).to.deep.equal( {
+            statusCode: 200
+        } );
+        done();
     } );
 
+    lab.test( 'test building without pre', ( done ) => {
 
-    lab.test( 'Build of a test definition with error in pre', ( done ) => {
-
-        const title = 'Title of the test with {pre.item1} and {input.str} when {input.bool}';
-        const input = {
+        const title = 'Title: {input.item}';
+        const paramSet = {
             titleComplement: 'complement',
-            str: 'value',
-            nb: 10,
-            bool: true,
-            arr: ['a']
+            input: {
+                item: 'Pony'
+            },
+            output: {
+                statusCode: 200
+            }
         };
-        const pre = [
+
+        const preparedTest = prepareOneTest( title, paramSet );
+
+        Code.expect( preparedTest ).to.be.an.object();
+        Code.expect( preparedTest.title ).to.equal( 'Title: Pony | complement' );
+        Code.expect( preparedTest.input ).to.deep.equal( {
+            item: 'Pony'
+        } );
+        Code.expect( preparedTest.output ).to.deep.equal( {
+            statusCode: 200
+        } );
+        done();
+    } );
+} );
+
+lab.experiment( 'When the pre hav errors', ( done ) => {
+
+    lab.test( 'Error in pre', ( done ) => {
+
+        const title = 'Title: {pre.item1} {input.item}';
+        const pres = [
             {
                 assign: 'item1',
-                name: 'item1Name',
+                name: 'item name',
                 method: function ( reply ) {
-
-                    // no err
-                    reply( null, {
-                        a: 10
-                    } );
-                }
-            },
-            {
-                assign: 'item2',
-                name: 'item2Name',
-                method: function ( reply ) {
-
                     // err
-                    reply( new Error( 'I hate unicorns.' ), null );
+                    reply( new Error( 'error' ), null );
                 }
             }
         ];
-
-        prepare( title, input, pre, ( errList, test ) => {
-
-            Code.expect( errList ).to.be.an.array();
-            Code.expect( errList.length ).to.equal( 1 );
-
-            Code.expect( test ).to.be.an.object();
-
-            Code.expect( test.title ).to.equal( 'Title of the test with item1Name and value when true | complement' );
-
-            Code.expect( test.input ).to.deep.equal( input );
-
-            Code.expect( test.pre ).to.deep.equal( {
-                item1: {
-                    a: 10
-                }
-            } );
-
-            done();
-        } );
-    } );
-
-    lab.test( 'Build of a test definition without pre', ( done ) => {
-
-        const title = 'Title of the test with {input.str} when {input.bool}';
-        const input = {
-            str: 'value',
-            nb: 10,
-            bool: true,
-            arr: ['a']
-        };
-        const pre = null;
-
-        prepare( title, input, pre, ( errList, test ) => {
-
-            Code.expect( errList ).to.be.an.array();
-            Code.expect( errList.length ).to.equal( 0 );
-
-            Code.expect( test ).to.be.an.object();
-
-            Code.expect( test.title ).to.equal( 'Title of the test with value when true' );
-
-            Code.expect( test.input ).to.deep.equal( input );
-
-            Code.expect( test.pre ).to.deep.equal( {} );
-
-            done();
-        } );
-    } );
-
-    lab.test( 'Build of a test definition without any arguments really', ( done ) => {
-
-        const title = null;
-        const input = null;
-        const pre = null;
-
-        prepare( title, input, pre, ( errList, test ) => {
-
-            Code.expect( errList ).to.be.an.array();
-            Code.expect( errList.length ).to.equal( 0 );
-
-            Code.expect( test ).to.be.an.object();
-
-            Code.expect( test.title ).to.equal( '' );
-
-            Code.expect( test.input ).to.deep.equal( {} );
-
-            Code.expect( test.pre ).to.deep.equal( {} );
-
-            done();
-        } );
-    } );
-} );
-
-lab.experiment( 'Build of a set of tests', () => {
-
-    lab.test( 'Two input sets', ( done ) => {
-
-        const definition = {
-            title: 'Title of the test with {pre.item1} and {input.user}',
-            pre: [
-                {
-                    assign: 'item1',
-                    name: 'item1Name',
-                    method: function ( reply ) {
-
-                        // no err
-                        reply( null, 10 );
-                    }
-                }
-            ],
-            paramSets: [
-                {
-                    input: {
-                        user: 'u1'
-                    },
-                    output: {
-                        statusCode: 200,
-                        payload: function ( code, payload ) {
-
-                            code.expect( payload ).to.be.an.array();
-                            code.expect( payload.length ).to.equal( 1 );
-                        }
-                    }
-                },
-                {
-                    input: {
-                        user: 'u3'
-                    },
-                    output: {
-                        statusCode: 403
-                    }
-                }
-            ]
-        };
-
-        prepareAllTests( definition, ( tests ) => {
-
-            Code.expect( tests ).to.be.an.array();
-            Code.expect( tests ).to.have.length( 2 );
-
-            Code.expect( tests[0].test ).to.deep.equal( {
-                title: 'Title of the test with item1Name and u1',
-                input: {
-                    user: 'u1'
-                },
-                pre: {
-                    item1: 10
-                }
-            } );
-
-            Code.expect( tests[0].errList ).to.be.an.array();
-            Code.expect( tests[0].errList ).to.have.length( 0 );
-
-            Code.expect( tests[0].output.statusCode ).to.equal( 200 );
-
-            done();
-        } );
-    } );
-} );
-
-lab.experiment( 'Execute the content of a test', () => {
-
-    lab.test( 'Without error in pre', ( done ) => {
-
-        const definition = {
-            title: 'Title of the test with {pre.item1} and {input.user}',
-            pre: [],
-            paramSets: [
-                {
-                    input: {
-                        itemId: '10'
-                    },
-                    output: {
-                        statusCode: 200,
-                        payload: function ( code, payload ) {
-
-                            code.expect( payload ).to.equal( 10 );
-                        }
-                    }
-                }
-            ],
-            inject: function ( pre, input ) {
-
-                const request = new Lcrud( '/items', null, null );
-                return request.get( null, null, input.itemId );
+        const paramSet = {
+            titleComplement: 'complement',
+            input: {
+                item: 'Pony'
+            },
+            output: {
+                statusCode: 200
             }
         };
+        const inject = function ( pre, input ) {
 
-        prepareAllTests( definition, ( tests ) => {
-
-            Code.expect( tests ).to.be.an.array();
-            Code.expect( tests ).to.have.length( 1 );
-            const test = tests[0];
-            runOneTest( definition, Server, test, ( x ) => {
-
-                Code.expect(x).to.not.exist();
-                done();
-            });
-        } );
-    } );
-
-    lab.test( 'Without error in pre and without handler validation', ( done ) => {
-
-        const definition = {
-            title: 'Title of the test with {pre.item1} and {input.user}',
-            pre: [],
-            paramSets: [
-                {
-                    input: {
-                        itemId: '10'
-                    },
-                    output: {
-                        statusCode: 200
-                    }
-                }
-            ],
-            inject: function ( pre, input ) {
-
-                const request = new Lcrud( '/items', null, null );
-                return request.get( null, null, input.itemId );
-            }
+            const request = new Lcrud( '/items', null, null );
+            return request.get( null, null );
         };
 
-        prepareAllTests( definition, ( tests ) => {
-
-            Code.expect( tests ).to.be.an.array();
-            Code.expect( tests ).to.have.length( 1 );
-            const test = tests[0];
-            runOneTest( definition, Server, test, ( x ) => {
-
-                Code.expect(x).to.not.exist();
-                done();
-            });
-        } );
-    } );
-
-    lab.test( 'With error in pre', ( done ) => {
-
         const definition = {
-            title: 'Title of the test with {pre.item1} and {input.user}',
-            pre: [
-                {
-                    assign: 'item1',
-                    name: 'item1Name',
-                    method: function ( reply ) {
-
-                        // err
-                        reply( new Error('my error'), null );
-                    }
-                }
-            ],
-            paramSets: [
-                {
-                    input: {
-                        itemId: '10'
-                    },
-                    output: {
-                        statusCode: 200
-                    }
-                }
-            ],
-            inject: function ( pre, input ) {
-
-                const request = new Lcrud( '/items', null, null );
-                return request.get( null, null, input.itemId );
-            }
+            title: title,
+            pre: pres,
+            paramSets: [paramSet],
+            inject: inject
         };
 
-        prepareAllTests( definition, ( tests ) => {
+        const preparedTest = prepareOneTest( title, paramSet, pres );
 
-            Code.expect( tests ).to.be.an.array();
-            Code.expect( tests ).to.have.length( 1 );
-            const test = tests[0];
-            runOneTest( definition, Server, test, ( x ) => {
+        runOneTest( definition, Server, preparedTest, ( x ) => {
 
-                Code.expect(x).to.exist();
-                done();
-            });
+            Code.expect( x ).to.be.an.object();
+            Code.expect( x ).to.exist();
+            done();
         } );
+
+
     } );
+
+
 } );
-
