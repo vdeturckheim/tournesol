@@ -1,3 +1,7 @@
+# 0.1.1
+
+* Pre functions can now be async
+
 # 0.1.0
 
 * Creation of the test description feature. Not really documented but an example is provided.
