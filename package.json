@@ -4,7 +4,8 @@
   "description": "A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/lab/bin/lab -c -L -v"
+    "test": "node node_modules/lab/bin/lab -c -L -v -f",
+    "example": "node node_modules/lab/bin/lab -c -L -v test/server.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "hoek": "^3.0.1"
   },
   "devDependencies": {
+    "hapi": "^11.1.0",
     "lab": "^7.2.0"
   }
 }

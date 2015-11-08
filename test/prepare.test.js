@@ -7,6 +7,11 @@ const lab = exports.lab = Lab.script();
 // Import of what to test
 const prepare = require( '../lib/preparation' ).prepareOneTest;
 const prepareAllTests = require( '../lib/preparation' ).prepareAllTests;
+const runOneTest = require( '../lib/preparation' ).runOneTest;
+
+// Resources
+const Server = require( '../resources/server' );
+const Lcrud = require( '../index' ).Lcrud;
 
 lab.experiment( 'Build of a test definition', () => {
 
@@ -232,5 +237,127 @@ lab.experiment( 'Build of a set of tests', () => {
             done();
         } );
     } );
-
 } );
+
+lab.experiment( 'Execute the content of a test', () => {
+
+    lab.test( 'Without error in pre', ( done ) => {
+
+        const definition = {
+            title: 'Title of the test with {pre.item1} and {input.user}',
+            pre: [],
+            paramSets: [
+                {
+                    input: {
+                        itemId: '10'
+                    },
+                    output: {
+                        statusCode: 200,
+                        payload: function ( code, payload ) {
+
+                            code.expect( payload ).to.equal( 10 );
+                        }
+                    }
+                }
+            ],
+            inject: function ( pre, input ) {
+
+                const request = new Lcrud( '/items', null, null );
+                return request.get( null, null, input.itemId );
+            }
+        };
+
+        prepareAllTests( definition, ( tests ) => {
+
+            Code.expect( tests ).to.be.an.array();
+            Code.expect( tests ).to.have.length( 1 );
+            const test = tests[0];
+            runOneTest( definition, Server, test, ( x ) => {
+
+                Code.expect(x).to.not.exist();
+                done();
+            });
+        } );
+    } );
+
+    lab.test( 'Without error in pre and without handler validation', ( done ) => {
+
+        const definition = {
+            title: 'Title of the test with {pre.item1} and {input.user}',
+            pre: [],
+            paramSets: [
+                {
+                    input: {
+                        itemId: '10'
+                    },
+                    output: {
+                        statusCode: 200
+                    }
+                }
+            ],
+            inject: function ( pre, input ) {
+
+                const request = new Lcrud( '/items', null, null );
+                return request.get( null, null, input.itemId );
+            }
+        };
+
+        prepareAllTests( definition, ( tests ) => {
+
+            Code.expect( tests ).to.be.an.array();
+            Code.expect( tests ).to.have.length( 1 );
+            const test = tests[0];
+            runOneTest( definition, Server, test, ( x ) => {
+
+                Code.expect(x).to.not.exist();
+                done();
+            });
+        } );
+    } );
+
+    lab.test( 'With error in pre', ( done ) => {
+
+        const definition = {
+            title: 'Title of the test with {pre.item1} and {input.user}',
+            pre: [
+                {
+                    assign: 'item1',
+                    name: 'item1Name',
+                    method: function ( reply ) {
+
+                        // err
+                        reply( new Error('my error'), null );
+                    }
+                }
+            ],
+            paramSets: [
+                {
+                    input: {
+                        itemId: '10'
+                    },
+                    output: {
+                        statusCode: 200
+                    }
+                }
+            ],
+            inject: function ( pre, input ) {
+
+                const request = new Lcrud( '/items', null, null );
+                return request.get( null, null, input.itemId );
+            }
+        };
+
+        prepareAllTests( definition, ( tests ) => {
+
+            Code.expect( tests ).to.be.an.array();
+            Code.expect( tests ).to.have.length( 1 );
+            const test = tests[0];
+            runOneTest( definition, Server, test, ( x ) => {
+
+                Code.expect(x).to.exist();
+                done();
+            });
+        } );
+    } );
+} );
+
