@@ -21,6 +21,17 @@ This package aims at making api tests using Hapi, Lab and Code easier. The idea 
 
 Please refer to [API reference](API.md)
 
+The test descriptor feature is not documented yet, however an example is presented:
+
+* A [Hapi server](resources/server.js) is created
+* and [tested](test/server.js)
+
+The command tu run this is:
+
+```shell
+$ npm run example
+```
+
 # About the name
 
 Tournesol is the french name of the crazy professor in [The Adventures of Tintin](https://en.wikipedia.org/wiki/The_Adventures_of_Tintin).
