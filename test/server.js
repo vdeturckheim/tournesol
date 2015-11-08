@@ -8,13 +8,23 @@ const runTests = require( '../index' ).runTests;
 lab.experiment('Test the example server using the main function', ( ) => {
 
     const definition = {
-        title: 'Title of the test with {input.itemId}',
-        pre: [],
+        title: 'Title of the test with value of {pre.half1} + {input.itemId}',
+        pre: [
+            {
+                assign: 'half1',
+                name: 'half1 ( = 5)',
+                method: function ( reply ) {
+
+                    // no err
+                    reply( null, 5 );
+                }
+            }
+        ],
         paramSets: [
             {
                 input: {
                     titleComplement: 'hello mommy',
-                    itemId: '10'
+                    itemId: 5
                 },
                 output: {
                     statusCode: 200
@@ -22,7 +32,7 @@ lab.experiment('Test the example server using the main function', ( ) => {
             },
             {
                 input: {
-                    itemId: '20'
+                    itemId: 10
                 },
                 output: {
                     statusCode: 404
@@ -32,7 +42,7 @@ lab.experiment('Test the example server using the main function', ( ) => {
         inject: function ( pre, input ) {
 
             const request = new Lcrud( '/items', null, null );
-            return request.get( null, null, input.itemId );
+            return request.get( null, null, input.itemId + pre.half1 );
         }
     };
 

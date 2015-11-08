@@ -1,6 +1,6 @@
 {
   "name": "tournesol",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist",
   "main": "index.js",
   "scripts": {

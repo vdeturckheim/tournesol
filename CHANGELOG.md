@@ -1,3 +1,8 @@
+# 0.1.0
+
+* Creation of the test description feature. Not really documented but an example is provided.
+* 1.0.0 will be released when doc will be done.
+
 # 0.0.2
 
 * Update doc and correct version number on npmjs
