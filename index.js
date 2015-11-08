@@ -1,21 +1,18 @@
 'use strict';
-const prepareAllTests = require( './lib/preparation' ).prepareAllTests;
 const runOneTest = require( './lib/preparation' ).runOneTest;
+const prepareOneTest = require( './lib/preparation' ).prepareOneTest;
 
 const runTests = function (definition, server, lab){
 
-    prepareAllTests(definition, (tests) => {
+    definition.paramSets.forEach( (paramSet) => {
 
-        tests.forEach((test) => {
+        const preparedTest = prepareOneTest(definition.title, paramSet, definition.pre);
+        lab.test(preparedTest.title, (done) => {
 
-            lab.test(test.test.title, (done) => {
-
-                runOneTest(definition, server, test, done);
-            });
+            runOneTest(definition, server, preparedTest, done);
         });
-    });
+    } );
 };
-
 
 module.exports = {
     Lcrud: require( './lib/Lcrud' ),

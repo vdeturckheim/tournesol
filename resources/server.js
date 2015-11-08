@@ -19,4 +19,15 @@ server.route({
     }
 });
 
+server.route({
+    method: 'GET',
+    path: '/items',
+    handler: function (request, reply) {
+
+        reply({
+            message: 'hello'
+        });
+    }
+});
+
 module.exports = server;

@@ -50,3 +50,30 @@ lab.experiment('Test the example server using the main function', ( ) => {
 
 
 });
+
+lab.experiment('Test the example server using the main function on the other route', ( ) => {
+
+    const definition = {
+        title: 'Title of the test ',
+        pre: [],
+        paramSets: [
+            {
+                input: { },
+                output: {
+                    statusCode: 200,
+                    payload: function (code, payload){
+
+                        code.expect(payload.message).to.equal('hello');
+                    }
+                }
+            }
+        ],
+        inject: function ( pre, input ) {
+
+            const request = new Lcrud( '/items', null, null );
+            return request.get( null, null );
+        }
+    };
+
+    runTests(definition, Server, lab);
+});
