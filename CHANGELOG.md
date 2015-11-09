@@ -1,3 +1,7 @@
+# 1.0.0
+
+* All documented now :happy:
+
 # 0.1.1
 
 * Pre functions can now be async

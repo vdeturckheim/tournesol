@@ -1,10 +1,8 @@
-# Tournesol API
-
-## Lcrud
+# Lcrud
 
 Creates requests ready to be used in a [Hapi server](https://github.com/hapijs/hapi) with `server.inject`.
 
-### Init
+## Init
 
 ```javascript
 const Lcrud = require( 'tournesol' ).Lcrud;
@@ -45,7 +43,7 @@ where:
     ```
 * `getHeaders` is the same as getPayload, but for headers.
 
-### Usage
+## Usage
 
 ```javascript
 const Lcrud = require( '../index' ).Lcrud;

@@ -7,30 +7,77 @@ A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist.
 $ npm install tournesol
 ```
 
-```javascript
-const Lcrud = require( 'tournesol' ).Lcrud;
-
-var request = new Lcrud(baseURL, getPayload, getHeaders);
-```
-
 # Purpose
 
 This package aims at making api tests using Hapi, Lab and Code easier. The idea is to focus on what the tests mean rather than how to perform them.
 
 # Usage
 
-Please refer to [API reference](API.md)
+```javascript
+const Lcrud = require( 'tournesol' ).Lcrud;
 
-The test descriptor feature is not documented yet, however an example is presented:
-
-* A [Hapi server](resources/server.js) is created
-* and [tested](test/server.js)
-
-The command tu run this is:
-
-```shell
-$ npm run example
+var request = new Lcrud(baseURL, getPayload, getHeaders);
 ```
+
+```javascript
+const Tournesol = require( 'tournesol' );
+const Lcrud = require( 'tournesol' ).Lcrud;
+const Lab = require( 'lab' );
+const lab = exports.lab = Lab.script();
+
+const Server = require( 'A Hapi server' ); // require the hapi server to test or build it within the test file. 
+
+const definition = {
+        title: 'Title of the test with value of {pre.half1} + {input.itemId}',
+        pre: [
+            {
+                assign: 'half1',
+                name: 'half1 ( = 5)',
+                method: function ( reply ) {
+
+                    // no err
+                    reply( null, 5 );
+                }
+            }
+        ],
+        paramSets: [
+            {
+                titleComplement: 'hello mommy',
+                input: {
+                    itemId: 5
+                },
+                output: {
+                    statusCode: 200
+                }
+            },
+            {
+                input: {
+                    itemId: 10
+                },
+                output: {
+                    statusCode: 404
+                }
+            }
+        ],
+        inject: function ( pre, input ) {
+
+            const request = new Lcrud( '/items', null, null );
+            return request.get( null, null, input.itemId + pre.half1 );
+        }
+    };
+
+    Tournesol.runTests(definition, Server, lab);
+```
+
+
+
+# Doc
+
+Please refer to: 
+
+* [Lcrud](doc/Lcrud.md): List + CRUD, to generates requests for tests.
+* [runTests](doc/runTests.md): to run tests from a nice definition object.
+
 
 # About the name
 
