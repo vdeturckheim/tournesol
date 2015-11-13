@@ -2,6 +2,7 @@
 
 [![Join the chat at https://gitter.im/vdeturckheim/tournesol](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vdeturckheim/tournesol?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/vdeturckheim/tournesol.svg?branch=master)](https://travis-ci.org/vdeturckheim/tournesol)
+[![Dependency Status](https://david-dm.org/vdeturckheim/tournesol.svg)](https://david-dm.org/vdeturckheim/tournesol)
 
 A Hapi-Glue-Lab-Code tool that could only be created by a crazy scientist.
 
